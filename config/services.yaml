@@ -1,0 +1,15 @@
+parameters:
+# Здесь могут быть параметры бандла
+
+services:
+
+  # Конфигурация для всех сервисов  этого файла по умолчанию
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  # Регистрируем контроллеры бандла, сервисы и репозитории как DI-сервисы
+  flexycms\FlexySecurityBundle\Service\UserAuthenticator: ~
+  flexycms\FlexySecurityBundle\Controller\AdminUserController: ~
+  flexycms\FlexySecurityBundle\Controller\SecurityController: ~
+  flexycms\FlexySecurityBundle\Repository\UserRepository: ~

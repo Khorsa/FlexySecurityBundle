@@ -1,0 +1,19 @@
+{% extends '@FlexyAdminFrame/adminpanelbase.html.twig' %}
+
+{% block content %}
+
+
+
+    {{ form_start(form) }}
+    <div class="admin-btn-top">
+        <a href="#" onclick="history.back();" class="btn btn-primary back btn"><i class="fas fa-arrow-left"></i><br>Вернуться</a>
+        {{ form_widget(form.save) | raw }}
+    </div>
+    {{ form_errors(form) }}
+
+
+    {{ form_end(form, {'render_rest': true}) }}
+
+
+
+{% endblock %}

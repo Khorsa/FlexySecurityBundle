@@ -1,0 +1,36 @@
+{
+  "name": "flexycms/flexysecurity-bundle",
+  "version": "0.1.0",
+  "type": "symfony-bundle",
+  "description": "Работа с пользователями и аутентификацией",
+  "license": "proprietary",
+  "require": {
+    "php": "^7.3",
+    "flexycms/flexyadminframe-bundle": "^0.1.0",
+    "flexycms/flexyadminhome-bundle": "^0.1.0"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "flexycms\\FlexySecurityBundle\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "flexycms\\FlexySecurityBundle\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test" : "./vendor/bin/simple-phpunit"
+  },
+  "extra": {
+    "symfony": {
+      "allow-contrib": false,
+      "require": "5.0.*"
+    }
+  }
+}

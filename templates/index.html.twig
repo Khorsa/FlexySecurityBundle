@@ -1,0 +1,45 @@
+{% extends '@FlexyAdminFrame/adminpanelbase.html.twig' %}
+{% block content %}
+
+    <div class="admin-btn-top">
+        <a href="{{ path('admin_user_create') }}" class="btn btn-success"><i class="far fa-plus-square"></i><br>Добавить<br>пользователя</a>
+    </div>
+
+    {#
+    <ul class="list-group">
+        {% for user in users %}
+
+            <li class="list-group-item">
+                <a href="{{ path("admin_user_edit", {'id': user.id}) }}" class="btn btn-sm btn-primary">
+                    <i class="far fa-edit"></i>
+                </a>
+                <a href="{{ path("admin_user_delete", {'id': user.id}) }}" class="btn btn-sm btn-danger" data-title="Подтвердите действие" data-message="Удалить пользователя?">
+                    <i class="far fa-trash-alt"></i>
+                </a>
+                <span class="ml-1">
+                    {{ user.email }}, {{ user.roles | json_encode }}
+                </span>
+            </li>
+
+        {% endfor %}
+
+    </ul>
+    #}
+
+
+
+    <table class="flexy-table" data-ajax="{{ ajax }}" data-serverside="true" data-checkboxes="true">
+        <thead>
+        <tr>
+            <th data-searchable="false" data-orderable="false" data-type=""></th> {# Чекбокс #}
+            <th data-searchable="false" data-orderable="false" data-type=""></th> {# Кнопки #}
+            <th data-searchable="true" data-orderable="true" data-type="string">E-mail</th>
+            <th data-searchable="true" data-orderable="true" data-type="string">Роли</th>
+            {# <th data-searchable="true" data-orderable="true" data-type="string">Дата регистрации</th> #}
+        </tr>
+        </thead>
+    </table>
+
+
+
+{% endblock %}
