@@ -150,9 +150,11 @@ class AdminUserController extends AdminBaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setRoles(['ROLE_ADMIN']);
+            if ($user->getPlainPassword()) {
+                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
+            //$user->setRoles(['ROLE_ADMIN']);
 
             $em->persist($user);
             $em->flush();
@@ -189,9 +191,11 @@ class AdminUserController extends AdminBaseController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setRoles(['ROLE_ADMIN']);
+            if ($user->getPlainPassword()) {
+                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
+            //$user->setRoles(['ROLE_ADMIN']);
 
             $em->persist($user);
             $em->flush();

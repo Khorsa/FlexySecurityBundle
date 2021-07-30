@@ -4,6 +4,7 @@ namespace flexycms\FlexySecurityBundle\Form;
 
 use flexycms\FlexySecurityBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -27,6 +28,13 @@ class UserType extends AbstractType
                 'second_options' => array(
                     'label' => "Повторите пароль",
                 ),
+                'required' => false,
+            ))
+            ->add('roles', ChoiceType::class, array(
+                'choices' => ['Администратор' => 'ROLE_ADMIN', 'Пользователь' => 'ROLE_USER'],
+                'expanded' => true,
+                'multiple' => true,
+                'label' => 'Роли в системе'
             ))
             ->add('save', SubmitType::class, array(
                 'label' => '<i class="fas fa-save"></i><br>Сохранить',
