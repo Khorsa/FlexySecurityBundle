@@ -31,7 +31,7 @@ class UserType extends AbstractType
                 'required' => false,
             ))
             ->add('roles', ChoiceType::class, array(
-                'choices' => ['Администратор' => 'ROLE_ADMIN', 'Пользователь' => 'ROLE_USER'],
+                'choices' => ['Администратор' => 'ROLE_ADMIN', 'Автор' => 'ROLE_AUTHOR'],
                 'expanded' => true,
                 'multiple' => true,
                 'label' => 'Роли в системе'
