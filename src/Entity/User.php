@@ -35,6 +35,16 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $code;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $codeDate;
+
 
 
     private $plain_password;
@@ -132,5 +142,38 @@ class User implements UserInterface
     public function setPlainPassword($password): void
     {
         $this->plain_password = $password;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string|null $code
+     */
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCodeDate()
+    {
+        return $this->codeDate;
+    }
+
+    /**
+     * @param mixed $codeDate
+     */
+    public function setCodeDate($codeDate): void
+    {
+        $this->codeDate = $codeDate;
     }
 }
