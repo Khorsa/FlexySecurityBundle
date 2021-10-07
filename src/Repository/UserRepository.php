@@ -2,6 +2,11 @@
 
 namespace flexycms\FlexySecurityBundle\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\QueryException;
 use flexycms\FlexySecurityBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -10,6 +15,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use function get_class;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,9 +25,7 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-	
     private $dataManager;
-
 
     public function __construct(ManagerRegistry $registry, EntityManagerInterface $dataManager)
     {
@@ -35,30 +39,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->dataManager->flush();
     }
 
-    public function create(User $item): void
+    public function create(User $user): void
     {
-        $this->dataManager->persist($item);
+        $this->dataManager->persist($user);
         $this->dataManager->flush();
     }
 
-    public function update(User $item): void
+    public function update(User $user = null): void
     {
-        $this->dataManager->flush();
-    }
-
-    public function delete(User $item): void
-    {
-        $this->dataManager->remove($item);
         $this->dataManager->flush();
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     * @param UserInterface $user
+     * @param string $newEncodedPassword
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
         $user->setPassword($newEncodedPassword);
@@ -66,13 +68,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-
     /**
      * @param string $searchString
      * @param array|null $order
      * @param array|null $limit
      * @return array
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws QueryException
      */
     public function getBySearch(string $searchString, ?array $order, ?array  $limit): array
     {
@@ -86,7 +87,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
         if (is_array($order)) $qb->orderBy('t.'.$order[0], $order[1]);
 
-
         if (is_array($limit)) {
             if (is_numeric($limit[0])) $qb->setFirstResult((int)($limit[0]));
             if (is_numeric($limit[1])) $qb->setMaxResults((int)($limit[1]));
@@ -95,28 +95,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb->getQuery()->execute();
     }
 
-
     /**
      * @return int
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function countAll(): int
     {
         $qb = $this->createQueryBuilder('c');
         $qb->select('count(c.id)');
-
         return $qb->getQuery()->getSingleScalarResult();
     }
-
 
     /**
      * @param string $searchString
      * @return int
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\Query\QueryException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     * @throws QueryException
      */
     public function countBySearch(string $searchString): int
     {
@@ -127,7 +123,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->addCriteria(
                 Criteria::create()
                     ->where(Criteria::expr()->contains("t.email", $searchString))
-            );        }
+            );
+        }
         return $qb->getQuery()->getSingleScalarResult();
     }
 }
